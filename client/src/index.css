@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+.bg-pattern-dots {
+  background-color: #fcfdfc; 
+  background-image: radial-gradient(#6D9773 1px, transparent 1px);
+  background-size: 24px 24px; 
+
+}
+
 @theme {
   --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
 }

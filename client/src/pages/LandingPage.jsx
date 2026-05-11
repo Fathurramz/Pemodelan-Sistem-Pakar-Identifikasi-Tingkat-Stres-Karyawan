@@ -145,7 +145,7 @@ const LandingPage = () => {
       {/* Main Content (Card) */}
       <main
         id="test-card"
-        className="bg-white pt-32 pb-16  px-4 flex justify-center flex-grow"
+        className="bg-pattern-dots pt-32 pb-16 px-4 flex justify-center flex-grow"
       >
         <div className="bg-white border-2 border-gray-100 rounded-3xl p-10 max-w-2xl w-full text-center shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
           <div className="inline-block bg-[#6D9773] text-white px-5 py-1.5 rounded-full text-xs font-semibold mb-6">
@@ -199,21 +199,21 @@ const LandingPage = () => {
               <p className="text-sm text-gray-300 mb-2 flex items-center gap-2">
                 <FaEnvelope className="text-lg" />
                 <a
-                  href="mailto:emailtim@gmail.com"
+                  href="CC26-PSU196@student.devacademy.id"
                   className="hover:text-[#BB8A52] transition-colors"
                 >
-                  emailtim@gmail.com
+                  CC26-PSU196@student.devacademy.id
                 </a>
               </p>
               <p className="text-sm text-gray-300 flex items-center gap-2">
                 <FaGithub className="text-lg" />
                 <a
-                  href="https://github.com/link-repo"
+                  href="https://github.com/Fathurramz/Pemodelan-Sistem-Pakar-Identifikasi-Tingkat-Stres-Karyawan"
                   target="_blank"
                   rel="noreferrer"
                   className="text-[#BB8A52] hover:underline"
                 >
-                  GitHub Repository
+                  GitHub Repository 
                 </a>
               </p>
             </div>
