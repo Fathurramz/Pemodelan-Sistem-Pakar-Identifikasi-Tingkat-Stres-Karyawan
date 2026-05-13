@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
 import { FaUserCircle, FaExclamationTriangle, FaCheckCircle, FaEnvelope, FaGithub } from "react-icons/fa";
 import logoAplikasi from "../assets/logo-capstone.svg";
 
 const Dashboard = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const navigate = useNavigate();
 
-  // Mock Data Hasil Analisis
-  const userResult = {
+  const [userResult, setUserResult] = useState({
     name: "Ahmad Reyhan",
     stressLevel: "Sedang",
     score: 65,
@@ -23,7 +23,32 @@ const Dashboard = () => {
       "Coba teknik pernapasan kotak (box breathing) saat merasa cemas.",
       "Komunikasikan beban kerja dengan atasan atau rekan tim."
     ]
-  };
+  });
+
+  // Proteksi Halaman
+  useEffect(() => {
+    const hasTested = localStorage.getItem('hasCompletedTest');
+    if (!hasTested) {
+      alert("Selesaikan tes kuesioner terlebih dahulu!");
+      navigate('/assessment');
+    }
+  }, [navigate]);
+
+  // Fetch Data dari BE
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/stress-result');
+        if (response.ok) {
+          const data = await response.json();
+          setUserResult(data);
+        }
+      } catch (error) {
+        console.log("Menunggu backend Fathur jalan...");
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col font-sans bg-slate-50">

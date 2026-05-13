@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import Footer from '../components/Footer';
+import Footer from "../components/Footer";
 import logoAplikasi from "../assets/logo-capstone.svg";
 import { FaEnvelope, FaGithub } from "react-icons/fa";
 
@@ -28,6 +28,9 @@ const Assessment = () => {
       setCurrentQuestion(currentQuestion + 1);
     } else {
       console.log("Kirim data ke backend:", answers);
+
+      localStorage.setItem("hasCompletedTest", "true");
+
       navigate("/dashboard");
     }
   };
@@ -122,7 +125,7 @@ const Assessment = () => {
         </div>
       </main>
 
-    <Footer/>
+      <Footer />
     </div>
   );
 };
