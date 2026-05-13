@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import logoAplikasi from "../assets/logo-capstone.svg";
 import { useState, useEffect } from "react";
+import Footer from "../components/Footer";
 import {
   FaGithub,
   FaEnvelope,
@@ -71,6 +72,7 @@ const LandingPage = () => {
               Test
             </a>
           </li>
+         
           <li>
             <a
               href="#about"
@@ -83,7 +85,16 @@ const LandingPage = () => {
               About Us
             </a>
           </li>
+           <li>
+            <Link
+              to="/dashboard"
+              className="hover:text-[#BB8A52] transition-colors"
+            >
+              Dashboard
+            </Link>
+          </li>
         </ul>
+
       </nav>
       {/* Hero Description Section */}
       <section className="bg-[#6D9773] text-center text-white pt-32 pb-20 px-8">
@@ -178,70 +189,7 @@ const LandingPage = () => {
           </Link>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer id="about" className="bg-[#0C3B2E] text-white px-8 py-16 mt-auto">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-2xl font-bold mb-8">About Us</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            {/* Kolom Kiri: Identitas & Kontak */}
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <img
-                  src={logoAplikasi}
-                  alt="Logo Aplikasi"
-                  className="w-10 h-10 object-contain bg-white rounded-full p-1"
-                />
-                <h3 className="font-bold text-lg tracking-wide">
-                  Pendeteksi Tingkat Stress
-                </h3>
-              </div>
-              <p className="text-sm text-gray-300 mb-2 flex items-center gap-2">
-                <FaEnvelope className="text-lg" />
-                <a
-                  href="CC26-PSU196@student.devacademy.id"
-                  className="hover:text-[#BB8A52] transition-colors"
-                >
-                  CC26-PSU196@student.devacademy.id
-                </a>
-              </p>
-              <p className="text-sm text-gray-300 flex items-center gap-2">
-                <FaGithub className="text-lg" />
-                <a
-                  href="https://github.com/Fathurramz/Pemodelan-Sistem-Pakar-Identifikasi-Tingkat-Stres-Karyawan"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-[#BB8A52] hover:underline"
-                >
-                  GitHub Repository 
-                </a>
-              </p>
-            </div>
-
-            <div>
-              <h4 className="font-bold mb-3 border-b border-[#6D9773] pb-2">
-                Dibangun Oleh: Tim Capstone CC26-PSU196
-              </h4>
-              <ul className="text-xs text-gray-300 grid grid-cols-1 gap-2">
-                <li>• Ahmad Reyhan Maghribi (FS) - CFCC763D6Y1071</li>
-                <li>• Fathur Ramantha (FS) - CFCC471D6Y2275</li>
-                <li>• Elan Nurhaliza (AI) - CACC161D6X2324</li>
-                <li>
-                  • Muhammad Khafidz Miftakhurrohman (AI) - CACC763D6Y1366
-                </li>
-                <li>• Putri Handayani (DS) - CDCC180D6X2407</li>
-                <li>• Stephen Lionel Halim (DS) - CDCC180D6Y1940</li>
-              </ul>
-            </div>
-          </div>
-
-          <hr className="border-[#6D9773]" />
-          <p className="text-xs mt-4 text-center text-gray-400">
-            © 2026 Tim Capstone CC26-PSU196 DBS Foundation. Dibangun dengan
-            React,Tailwind CSS & Doa Ibu
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
