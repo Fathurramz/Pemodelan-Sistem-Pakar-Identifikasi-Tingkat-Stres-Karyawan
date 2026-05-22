@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Distribution
+*.egg-info/
+dist/
+build/
+
+# ML Models (terlalu besar untuk git)
+*.pkl
+*.h5
+*.joblib
+*.pt
