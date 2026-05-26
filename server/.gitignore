@@ -21,8 +21,15 @@ env/
 dist/
 build/
 
+# Databases
+*.db
+
 # ML Models (terlalu besar untuk git)
 *.pkl
 *.h5
 *.joblib
 *.pt
+
+# Allow production models to be committed
+!app/ml_model/*.pkl
+
