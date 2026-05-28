@@ -1,23 +1,46 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import logoAplikasi from "../assets/logo-capstone.svg";
 import { FaEnvelope, FaGithub } from "react-icons/fa";
 
-// Mock Data Pertanyaan dummy
-const questions = [
-  { id: 1, text: "Seberapa sering Anda merasa kelelahan setelah bekerja?" },
-  {
-    id: 2,
-    text: "Apakah Anda sulit berkonsentrasi pada tugas akhir-akhir ini?",
-  },
-  { id: 3, text: "Seberapa sering Anda merasa cemas terkait pekerjaan?" },
-];
-
 const Assessment = () => {
+  const [questions, setQuestions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
   const navigate = useNavigate();
+
+  useEffect(() => {
+  const fetchQuestions = async () => {
+    try {
+
+      const response = await fetch("http://localhost:5000/api/questions"); 
+      
+      if (!response.ok) {
+        throw new Error(`Server merespons dengan status: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      if (data && data.questions) {
+        setQuestions(data.questions);
+      } else {
+        throw new Error("Format data dari API tidak sesuai (.questions tidak ditemukan)");
+      }
+      
+      setIsLoading(false);
+    } catch (err) {
+      console.error("Error fetching data:", err);
+      setError(err.message);
+      setIsLoading(false);
+    }
+  };
+
+  fetchQuestions();
+}, []);
 
   const handleAnswer = (value) => {
     setAnswers({ ...answers, [currentQuestion]: value });
@@ -34,6 +57,44 @@ const Assessment = () => {
       navigate("/dashboard");
     }
   };
+
+  // A. Jika data sedang diambil
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center font-sans text-[#0C3B2E] bg-gray-50 font-bold text-lg">
+        <div className="text-center">
+          <p className="animate-pulse">Memuat pertanyaan dari database...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // B. Jika terjadi error koneksi / salah rute API
+  if (error) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center font-sans bg-gray-50 p-6 text-center">
+        <div className="bg-white p-8 rounded-2xl shadow-md border border-red-100 max-w-md">
+          <h3 className="text-xl font-bold text-red-600 mb-2">Gagal Memuat Kuesioner</h3>
+          <p className="text-gray-600 text-sm mb-6">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="bg-[#6D9773] text-white px-6 py-2 rounded-full font-semibold hover:bg-[#0C3B2E] transition-colors"
+          >
+            Coba Lagi
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // C. Jika data sukses diambil tapi isinya kosong
+  if (!questions || questions.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center font-sans text-gray-600 bg-gray-50">
+        Belum ada data pertanyaan di database. Jalankan script seed terlebih dahulu.
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col font-sans bg-pattern-dots">
@@ -104,11 +165,11 @@ const Assessment = () => {
                 }`}
               >
                 {score} -{" "}
-                {score === 1
-                  ? "Sangat Tidak Setuju"
-                  : score === 5
-                    ? "Sangat Setuju"
-                    : "Netral"}
+                {score === 1 && "Sangat Tidak Setuju"}
+                {score === 2 && "Tidak Setuju"}
+                {score === 3 && "Netral"}
+                {score === 4 && "Setuju"}
+                {score === 5 && "Sangat Setuju"}
               </button>
             ))}
           </div>
