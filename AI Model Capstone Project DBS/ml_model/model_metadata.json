@@ -1,0 +1,24 @@
+{
+  "model": "RandomForestClassifier",
+  "cv_accuracy": 0.2021,
+  "test_accuracy": 0.1967,
+  "features": [
+    "Avg_Working_Hours_Per_Day",
+    "Work_From",
+    "Work_Pressure",
+    "Manager_Support",
+    "Sleeping_Habit",
+    "Exercise_Habit",
+    "Job_Satisfaction",
+    "Work_Life_Balance",
+    "Social_Person",
+    "Lives_With_Family"
+  ],
+  "labels": [
+    "Tidak Stres",
+    "Stres Ringan",
+    "Stres Sedang",
+    "Stres Berat",
+    "Stres Sangat Berat"
+  ]
+}

@@ -31,16 +31,15 @@ class Question(db.Model):
     __tablename__ = "questions"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    code = db.Column(db.String(10), unique=True, nullable=False)
     text = db.Column(db.Text, nullable=False)
-    category = db.Column(
-        db.Enum("beban_kerja", "lingkungan_kerja", "kesehatan", name="category_enum"),
-        nullable=False,
-    )
+    category = db.Column(db.String(100), nullable=False)
     order_number = db.Column(db.Integer, nullable=False)
 
     def to_dict(self):
         return {
             "id": self.id,
+            "code": self.code,
             "text": self.text,
             "category": self.category,
             "order_number": self.order_number,
@@ -55,10 +54,7 @@ class Assessment(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     score = db.Column(db.Integer, nullable=False)
-    stress_level = db.Column(
-        db.Enum("Rendah", "Sedang", "Tinggi", name="stress_level_enum"),
-        nullable=False,
-    )
+    stress_level = db.Column(db.String(50), nullable=False)
     factors = db.Column(db.JSON, nullable=False)
     recommendations = db.Column(db.JSON, nullable=False)
     answers = db.Column(db.JSON, nullable=False)
@@ -74,3 +70,4 @@ class Assessment(db.Model):
             "recommendations": self.recommendations,
             "lastTest": self.created_at.strftime("%d %B %Y"),
         }
+
