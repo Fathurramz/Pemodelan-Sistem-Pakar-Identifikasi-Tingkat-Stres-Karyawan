@@ -44,10 +44,25 @@ def combine_cf_ml(cf_result, ml_result, cf_weight=0.7):
     Returns:
         dict: diagnosis final
     """
-    ml_weight = 1.0 - cf_weight
-    
     cf_scores = cf_result['all_scores']
     cf_vec = np.array([cf_scores.get(f'D{i+1}', 0.0) for i in range(4)])
+    
+    # JIKA TIDAK ADA GEJALA KLINIS SAMA SEKALI (CF sum = 0.0)
+    # Diagnosis klinis otomatis "Tidak Stres" (D1) dengan tingkat keyakinan rendah
+    if cf_vec.sum() == 0.0:
+        return {
+            "final_diagnosis": "Tidak Stres",
+            "final_code": "D1",
+            "final_score": 0.0,
+            "score_breakdown": {
+                "Tidak Stres": 1.0,
+                "Stres Ringan": 0.0,
+                "Stres Sedang": 0.0,
+                "Stres Berat": 0.0
+            }
+        }
+        
+    ml_weight = 1.0 - cf_weight
     
     # ML model memiliki 5 kelas (termasuk Stres Sangat Berat)
     # CF model memiliki 4 kelas D1-D4
@@ -75,6 +90,7 @@ def combine_cf_ml(cf_result, ml_result, cf_weight=0.7):
         "final_score": round(float(combined[final_idx]), 4),
         "score_breakdown": dict(zip(labels4, combined.round(4).tolist()))
     }
+
 
 REKOMENDASI = {
     "D1": {
