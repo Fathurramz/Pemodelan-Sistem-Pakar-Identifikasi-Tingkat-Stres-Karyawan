@@ -15,20 +15,24 @@ const Assessment = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-       const response = await fetch(`${import.meta.env.VITE_API_URL}/questions`);
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/questions`,
+        );
         if (!response.ok) {
           throw new Error("Gagal memuat daftar pertanyaan dari server.");
         }
         const data = await response.json();
-        
+
         // Urutkan berdasarkan order_number
-        const sorted = data.questions.sort((a, b) => a.order_number - b.order_number);
+        const sorted = data.questions.sort(
+          (a, b) => a.order_number - b.order_number,
+        );
         setQuestions(sorted);
 
         // Inisialisasi default answer untuk A1 (jam kerja) ke 8.0 jika ada
-        const a1Question = sorted.find(q => q.code === "A1");
+        const a1Question = sorted.find((q) => q.code === "A1");
         if (a1Question) {
-          setAnswers(prev => ({ ...prev, "A1": 8.0 }));
+          setAnswers((prev) => ({ ...prev, A1: 8.0 }));
         }
       } catch (err) {
         setError(err.message);
@@ -60,13 +64,16 @@ const Assessment = () => {
 
   const handleSubmit = async () => {
     try {
-     const response = await fetch(`${import.meta.env.VITE_API_URL}/assessments`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/assessments`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ answers }),
         },
-        body: JSON.stringify({ answers }),
-      });
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -89,8 +96,12 @@ const Assessment = () => {
       return (
         <div className="flex flex-col gap-4 mb-8">
           <div className="flex justify-between items-center bg-[#f0f9f1] p-4 rounded-xl border border-gray-100">
-            <span className="text-sm font-semibold text-[#0C3B2E]">Jam Kerja Rata-Rata:</span>
-            <span className="text-xl font-bold text-[#0C3B2E]">{val} Jam / Hari</span>
+            <span className="text-sm font-semibold text-[#0C3B2E]">
+              Jam Kerja Rata-Rata:
+            </span>
+            <span className="text-xl font-bold text-[#0C3B2E]">
+              {val} Jam / Hari
+            </span>
           </div>
           <input
             type="range"
@@ -203,7 +214,9 @@ const Assessment = () => {
           >
             <span>{opt.label}</span>
             {answers[code] === opt.value && (
-              <span className="w-5 h-5 bg-[#6D9773] rounded-full flex items-center justify-center text-white text-xs">✓</span>
+              <span className="w-5 h-5 bg-[#6D9773] rounded-full flex items-center justify-center text-white text-xs">
+                ✓
+              </span>
             )}
           </button>
         ))}
@@ -215,7 +228,9 @@ const Assessment = () => {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center font-sans bg-slate-50">
         <div className="w-12 h-12 border-4 border-[#6D9773] border-t-transparent rounded-full animate-spin mb-4"></div>
-        <p className="text-gray-500 font-medium">Memuat pertanyaan kuesioner...</p>
+        <p className="text-gray-500 font-medium">
+          Memuat pertanyaan kuesioner...
+        </p>
       </div>
     );
   }
@@ -223,9 +238,17 @@ const Assessment = () => {
   if (error) {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center font-sans bg-slate-50 px-4 text-center">
-        <p className="text-red-500 font-bold text-lg mb-4">Gagal terhubung ke backend server.</p>
-        <p className="text-gray-500 text-sm mb-6 max-w-md">Pastikan server backend Flask Anda sudah dijalankan dengan benar pada http://localhost:5000.</p>
-        <button onClick={() => window.location.reload()} className="bg-[#6D9773] text-white px-6 py-2.5 rounded-full font-bold">
+        <p className="text-red-500 font-bold text-lg mb-4">
+          Gagal terhubung ke backend server.
+        </p>
+        <p className="text-gray-500 text-sm mb-6 max-w-md">
+          Pastikan server backend Flask Anda sudah dijalankan dengan benar pada
+          http://localhost:5000.
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="bg-[#6D9773] text-white px-6 py-2.5 rounded-full font-bold"
+        >
           Coba Lagi
         </button>
       </div>
@@ -279,13 +302,16 @@ const Assessment = () => {
           </div>
 
           <p className="text-[10px] text-gray-500 mt-5 italic text-center">
-            *Berikan jawaban yang paling jujur sesuai kondisi Anda dalam beberapa minggu terakhir.
+            *Berikan jawaban yang paling jujur sesuai kondisi Anda dalam
+            beberapa minggu terakhir.
           </p>
         </div>
-        
+
         <div className="bg-white p-8 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] max-w-xl w-full border border-gray-150">
           <div className="mb-4 text-xs text-gray-400 font-bold tracking-widest uppercase">
-            {currentQ.code.startsWith("G") ? "Bagian 1: Gejala Stres (CF)" : "Bagian 2: Data Aktivitas (ML)"}
+            {currentQ.code.startsWith("G")
+              ? "Bagian 1: Gejala Stres (CF)"
+              : "Bagian 2: Data Aktivitas (ML)"}
           </div>
 
           <h2 className="text-xl font-bold text-[#0C3B2E] mb-6 leading-relaxed">
@@ -296,12 +322,12 @@ const Assessment = () => {
           {renderInput(currentQ)}
 
           {/* Tombol Navigasi */}
-          <div className="flex gap-4">
+          <div className="flex gap-2 md:gap-4 w-full">
             {currentQuestion > 0 && (
               <button
                 type="button"
                 onClick={handlePrev}
-                className="w-1/3 border-2 border-gray-200 text-gray-600 py-3.5 rounded-full font-bold hover:border-gray-400 hover:bg-gray-50 transition-all shadow-sm"
+                className="flex-1 text-sm md:text-base border-2 border-gray-200 text-gray-600 py-3 md:py-3.5 rounded-full font-bold hover:border-gray-400 hover:bg-gray-50 transition-all shadow-sm px-1"
               >
                 Sebelumnya
               </button>
@@ -310,9 +336,7 @@ const Assessment = () => {
               type="button"
               onClick={handleNext}
               disabled={!isAnswered}
-              className={`py-3.5 rounded-full font-bold transition-all shadow-md flex-grow ${
-                currentQuestion > 0 ? "w-2/3" : "w-full"
-              } bg-[#6D9773] text-white hover:bg-[#0C3B2E] disabled:bg-gray-300 disabled:cursor-not-allowed`}
+              className={`flex-1 text-sm md:text-base py-3 md:py-3.5 px-1 rounded-full font-bold transition-all shadow-md bg-[#6D9773] text-white hover:bg-[#0C3B2E] disabled:bg-gray-300 disabled:cursor-not-allowed`}
             >
               {currentQuestion === questions.length - 1
                 ? "Selesai & Analisis"

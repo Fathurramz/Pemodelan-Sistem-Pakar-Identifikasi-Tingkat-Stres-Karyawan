@@ -44,7 +44,7 @@ const Dashboard = () => {
           setUserResult(data);
         }
       } catch (error) {
-        console.log("Menunggu backend Fathur jalan...");
+        console.log("Menunggu backend jalan...");
       }
     };
     fetchData();
