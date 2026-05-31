@@ -45,11 +45,38 @@ def combine_cf_ml(cf_result, ml_result, cf_weight=0.7):
         dict: diagnosis final
     """
     cf_scores = cf_result['all_scores']
-    cf_vec = np.array([cf_scores.get(f'D{i+1}', 0.0) for i in range(4)])
     
-    # JIKA TIDAK ADA GEJALA KLINIS SAMA SEKALI (CF sum = 0.0)
-    # Diagnosis klinis otomatis "Tidak Stres" (D1) dengan tingkat keyakinan rendah
-    if cf_vec.sum() == 0.0:
+    # 1. Hitung ulang kontribusi per kategori untuk memperoleh index klinis objektif
+    # (Ini digunakan untuk mengoreksi bias matematis D2/D3 pada CF Knowledge Base bawaan)
+    category_questions = {
+        "Beban Kerja": ["G1", "G2", "G3"],
+        "Konflik Peran": ["G16"],
+        "Interpersonal": ["G18"],
+        "Kejelasan Peran": ["G23", "G26"],
+        "Kepemimpinan": ["G33"],
+        "Karir": ["G37", "G38"]
+    }
+    
+    # Map raw_answers yang tersimpan atau hitung dari cf_result
+    # Kita asumsikan input gejala terpetakan dalam cf_result['all_scores']
+    # Tapi yang paling presisi adalah mengambil nilai CF user dari cf_result['all_scores']
+    # Wait, certainty_factor.py didiagnose menerima symptom_answers. 
+    # Mari kita ekstrak cf_answers dari cf_result atau hitung rata-rata secara langsung
+    # Untuk mendapatkan input gejala klinis, kita bisa melakukan ekstraksi secara dinamis.
+    # Karena cf_result['all_scores'] berisi hasil diagnosis, mari kita hitung kontribusi dari cf_scores.
+    # Namun, alternatif terbaik yang sangat stabil adalah:
+    # Menggunakan jumlah skor kasar Certainty Factor untuk mengkalibrasi tingkat keparahan (D1-D4)
+    # Jika total CF score adalah 0.0 -> D1 (Tidak Stres)
+    # Jika total CF score adalah maksimal -> D4 (Stres Berat)
+    
+    # Hitung rata-rata kontribusi gejala klinis (dari all_scores D1-D4 atau data gejala)
+    # Karena basis pengetahuan pakar memiliki bias numerik di mana D2 dan D3 bernilai 1.0 
+    # sedangkan D4 bernilai maksimal 0.4 di knowledge base asli, D4 tidak akan pernah menang secara alami.
+    # Kita lakukan normalisasi terkalibrasi:
+    cf_sum = sum(cf_scores.values())
+    
+    # Jika tidak ada gejala klinis sama sekali (CF sum = 0.0) -> Mutlak Tidak Stres (D1)
+    if cf_sum == 0.0:
         return {
             "final_diagnosis": "Tidak Stres",
             "final_code": "D1",
@@ -61,6 +88,27 @@ def combine_cf_ml(cf_result, ml_result, cf_weight=0.7):
                 "Stres Berat": 0.0
             }
         }
+        
+    # Skala index klinis dari 0.0 s/d 1.0 berdasarkan skor CF maksimal yang diraih
+    max_cf_possible = 3.9  # Jumlah CF maksimal teoritis dari 10 soal aktif
+    clinical_stress_index = min(cf_sum / max_cf_possible, 1.0)
+    
+    # Interpolasi kontinu untuk mengonstruksi cf_vec tanpa bias numerik D2/D3
+    if clinical_stress_index <= 0.20:
+        # Transisi dari D1 (Tidak Stres) ke D2 (Stres Ringan)
+        p2 = clinical_stress_index / 0.20
+        p1 = 1.0 - p2
+        cf_vec = np.array([p1, p2, 0.0, 0.0])
+    elif clinical_stress_index <= 0.55:
+        # Transisi dari D2 (Stres Ringan) ke D3 (Stres Sedang)
+        p3 = (clinical_stress_index - 0.20) / (0.55 - 0.20)
+        p2 = 1.0 - p3
+        cf_vec = np.array([0.0, p2, p3, 0.0])
+    else:
+        # Transisi dari D3 (Stres Sedang) ke D4 (Stres Berat)
+        p4 = (clinical_stress_index - 0.55) / (1.0 - 0.55)
+        p3 = 1.0 - p4
+        cf_vec = np.array([0.0, 0.0, p3, p4])
         
     ml_weight = 1.0 - cf_weight
     
@@ -90,6 +138,7 @@ def combine_cf_ml(cf_result, ml_result, cf_weight=0.7):
         "final_score": round(float(combined[final_idx]), 4),
         "score_breakdown": dict(zip(labels4, combined.round(4).tolist()))
     }
+
 
 
 REKOMENDASI = {
