@@ -1,6 +1,7 @@
-# Jangan Langsung Push ke Branch main ya teman2 biar gak konflik ty
+# Link Demo : https://sistem-pakar-stres-seven.vercel.app/
 
 # 🧠 Sistem Pakar & Machine Learning: Pendeteksi Tingkat Stres Karyawan
+
 **Proyek Capstone Tim CC26-PSU196 | Coding Camp 2026 powered by DBS Foundation**
 
 Repositori ini berisi implementasi sistem deteksi dini tingkat stres karyawan berbasis **Hybrid AI**: penggabungan metode **Certainty Factor (Expert System)** sebagai komponen utama (bobot 70%) dan **Machine Learning (Random Forest Classifier)** sebagai komponen pendukung (bobot 30%).
@@ -10,6 +11,7 @@ Sistem telah disesuaikan menjadi **20 pertanyaan kuesioner** agar efisien untuk 
 ---
 
 ## 🌟 Fitur Unggulan
+
 1. **Hybrid AI Engine**: Penggabungan sequential Certainty Factor (`certainty_factor.py`) dan model Random Forest Classifier (`stress_model.pkl`) menghasilkan diagnosis yang lebih objektif dan kontekstual.
 2. **Defensive Database Fallback**: Server Flask secara otomatis mendeteksi ketersediaan server MySQL lokal pada port 3306. Jika MySQL tidak aktif/ditemukan, server akan otomatis beralih menggunakan **SQLite local database** (`server/stress_detection.db`) sehingga aplikasi siap ditesting secara instan.
 3. **Interactive Questionnaire Wizard**: Form kuesioner interaktif di frontend yang dinamis, membagi 20 pertanyaan menjadi 2 bagian:
@@ -21,6 +23,7 @@ Sistem telah disesuaikan menjadi **20 pertanyaan kuesioner** agar efisien untuk 
 ---
 
 ## 📂 Struktur Proyek
+
 - `/client` : React Frontend (Vite)
   - `/src/pages/Assessment.jsx` : Halaman kuesioner dinamis (mengambil pertanyaan dari API dan mengirimkan jawaban hybrid).
   - `/src/pages/Dashboard.jsx` : Visualisasi analisis tingkat stres, faktor pemicu, dan rekomendasi pakar.
@@ -36,22 +39,29 @@ Sistem telah disesuaikan menjadi **20 pertanyaan kuesioner** agar efisien untuk 
 ## 🚀 Cara Menjalankan Aplikasi
 
 ### 1. Backend - Flask Server
+
 1. Masuk ke folder server:
+
    ```bash
    cd server
    ```
 2. Pastikan virtual environment aktif (jika ada) dan install dependencies:
+
    ```bash
    pip install -r requirements.txt
    ```
+
    *(Mengunduh library Flask, PyMySQL, Cryptography, scikit-learn, joblib, pandas, dan numpy).*
 3. Jalankan server lokal:
+
    ```bash
    python run.py
    ```
+
    *Secara otomatis database akan dimigrasi dan di-seed dengan 20 pertanyaan baru.*
 
 ### 2. Frontend - React client
+
 1. Masuk ke folder client:
    ```bash
    cd ../client
@@ -69,6 +79,7 @@ Sistem telah disesuaikan menjadi **20 pertanyaan kuesioner** agar efisien untuk 
 ---
 
 ## 👥 Kontributor (CC26-PSU196)
+
 - **Ahmad Reyhan Maghribi** (Fullstack Developer)
 - **Fathur Ramantha** (Fullstack Developer)
 - **Elan Nurhaliza** (AI Engineer)
