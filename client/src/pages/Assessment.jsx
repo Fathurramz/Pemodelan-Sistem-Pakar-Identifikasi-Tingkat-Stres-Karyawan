@@ -15,7 +15,7 @@ const Assessment = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/questions");
+       const response = await fetch(`${import.meta.env.VITE_API_URL}/questions`);
         if (!response.ok) {
           throw new Error("Gagal memuat daftar pertanyaan dari server.");
         }
@@ -60,7 +60,7 @@ const Assessment = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/assessments", {
+     const response = await fetch(`${import.meta.env.VITE_API_URL}/assessments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
