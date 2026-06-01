@@ -50,6 +50,20 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
+  const getFactorColor = (label) => {
+    const category_colors = {
+        "Beban dan Tekanan Kerja": "bg-red-500",
+        "Konflik Peran dan Penugasan": "bg-orange-500",
+        "Hubungan Interpersonal di Tempat Kerja": "bg-yellow-500",
+        "Kejelasan Peran dan Informasi Kerja": "bg-blue-500",
+        "Gaya Kepemimpinan dan Penilaian Kinerja": "bg-indigo-500",
+        "Pengembangan Karir dan Kepuasan Kerja": "bg-purple-500"
+    };
+    
+    // Kembalikan warna sesuai label, jika tidak ada fallback ke abu-abu
+    return category_colors[label?.trim()] || "bg-gray-400";
+  };
+
   return (
     <div className="min-h-screen flex flex-col font-sans bg-slate-50">
       
